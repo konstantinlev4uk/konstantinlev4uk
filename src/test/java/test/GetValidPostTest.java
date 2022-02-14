@@ -2,23 +2,30 @@ package test;
 
 import business.ApiPost;
 import org.testng.Assert;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import step.ApiSteps;
+import constant.StatusCodeAndId;
+import utils.PropertyUtil;
+
+import java.util.Properties;
 
 public class GetValidPostTest {
 
+    private int userId10;
 
-    private static final int POST_ID_99 = 99;
-//вынести в тест дата
+    @BeforeMethod
+    public void initTestData() {
+        Properties dataTest = PropertyUtil.getProperties("testData.properties");
+        userId10 = Integer.parseInt(dataTest.getProperty("userId10"));
+    }
+
     @Test
     public void getAllPostsTest1() {
-        ApiPost apiPost = ApiSteps.getPost(POST_ID_99);
-        Assert.assertEquals(apiPost.userId, 10, "UserID is not 10");
-        Assert.assertEquals(apiPost.id, 99, "Id is not 99");
-      //  Assert.assertNotEquals(apiPost.title, null, "UserId is null");
-        //переделать
-        Assert.assertNotEquals(apiPost.body, null, "Body is null");
-        Assert.assertNotNull(apiPost.title,"UserId is null");
-        int i = 0;
+        ApiPost apiPost = ApiSteps.getPost(StatusCodeAndId.ID_99);
+        Assert.assertEquals(apiPost.userId, userId10, "UserID is not" + userId10);
+        Assert.assertEquals(apiPost.id, StatusCodeAndId.ID_99, "Id is not" + StatusCodeAndId.ID_99);
+        Assert.assertNotNull(apiPost.body, "Body is not null");
+        Assert.assertNotNull(apiPost.title, "UserId is not null");
     }
 }

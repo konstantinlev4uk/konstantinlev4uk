@@ -5,24 +5,27 @@ import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import step.ApiSteps;
+import utils.PropertyUtil;
 
 import java.util.List;
+import java.util.Properties;
 
 public class EqualsUsersTest {
-   /* private int id;
+
+   private int idUser;
 
     @BeforeMethod
     public void initTestData() {
-        id = סקטעגûאוט
-    }*/
+        Properties dataTest = PropertyUtil.getProperties("testData.properties");
+        idUser = Integer.parseInt(dataTest.getProperty("idUser"));
+    }
 
     @Test
     public void equalsUsersTest(){
 
         List<User> allUsers = ApiSteps.getAllUsers();
-        User selectedUser = allUsers.stream().filter(i -> i.id == 5).findAny().orElse(null);
-
-        User user=ApiSteps.getUser(5);
+        User selectedUser = allUsers.stream().filter(i -> i.id == idUser).findAny().orElse(null);
+        User user=ApiSteps.getUser(idUser);
         Assert.assertEquals(selectedUser,user,"User different");
     }
 }
