@@ -2,12 +2,16 @@ package utils;
 
 import business.User;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import step.ApiSteps;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.Random;
+import java.util.logging.Logger;
 
 public class Helper {
+
+    static Logger log = Logger.getLogger(Helper.class.getName());
 
     public static String generateString() {
         int leftLimit = 48; // numeral '0'
@@ -21,8 +25,14 @@ public class Helper {
                 .toString();
     }
 
-    public static User getUserFromFile(String pathToFile) throws IOException {
+    public static User getUserFromFile(String pathToFile) {
         ObjectMapper objectMapper = new ObjectMapper();
-        return objectMapper.readValue(new File(pathToFile), User.class);
+        User user = null;
+        try {
+            user = objectMapper.readValue(new File(pathToFile), User.class);
+        } catch (IOException e) {
+            log.info(e.getMessage());
+        }
+        return user;
     }
 }

@@ -4,10 +4,10 @@ import business.ApiPost;
 import business.User;
 import endPoint.EndPoint;
 import io.restassured.response.Response;
+import org.apache.http.HttpStatus;
 import org.json.simple.JSONObject;
 import org.testng.Assert;
 import utils.ApiUtils;
-import constant.StatusCodeAndId;
 
 import java.util.List;
 import java.util.logging.Logger;
@@ -19,28 +19,31 @@ public class ApiSteps {
     public static ApiPost getPost(int postId) {
         log.info("getting post");
         Response apiResponse = ApiUtils.sendGet(EndPoint.POSTS.getEndPoint() + postId);
-        log.info("Create ApiPost");
-        ApiPost apiPost = apiResponse.getBody().as(ApiPost.class);
-        log.info("checking StatusCode");
-        Assert.assertEquals(apiResponse.statusCode(), StatusCodeAndId.CODE_200, "Status code is not " + StatusCodeAndId.CODE_200);
-        log.info("post received");
+        ApiPost apiPost = new ApiPost();
+        if (apiResponse.statusCode() == HttpStatus.SC_OK) {
+            log.info("Create ApiPost");
+            apiPost = apiResponse.getBody().as(ApiPost.class);
+            log.info("checking StatusCode");
+            Assert.assertEquals(apiResponse.statusCode(), HttpStatus.SC_OK, "Status code is not " + HttpStatus.SC_OK);
+        } else if (apiResponse.getStatusCode() == HttpStatus.SC_NOT_FOUND) {
+            log.info("Create ApiPost");
+            apiPost = apiResponse.getBody().as(ApiPost.class);
+            log.info("checking StatusCode");
+            Assert.assertEquals(apiResponse.getStatusCode(), HttpStatus.SC_NOT_FOUND, "Status code is not" + HttpStatus.SC_NOT_FOUND);
+            log.info("checking response body");
+            Assert.assertEquals(apiResponse.getBody().print(), "{}", "Response body is not empty");
+        } else {
+            log.info("StatusCode is different" + HttpStatus.SC_OK + "or" + HttpStatus.SC_NOT_FOUND);
+        }
         return apiPost;
     }
 
-    public static Response getNotFoundPost(int postId) {
-        log.info("getting post");
-        Response apiResponse = ApiUtils.sendGet(EndPoint.POSTS.getEndPoint() + postId);
-        log.info("checking StatusCode");
-        Assert.assertEquals(apiResponse.getStatusCode(), StatusCodeAndId.CODE_404, "Status code is not" + StatusCodeAndId.CODE_404);
-        log.info("post received");
-        return apiResponse;
-    }
 
     public static List<ApiPost> getAllPosts() {
         log.info("getting all posts");
         Response apiResponse = ApiUtils.sendGet(EndPoint.POSTS.getEndPoint());
         log.info("checking StatusCode");
-        Assert.assertEquals(apiResponse.statusCode(), StatusCodeAndId.CODE_200, "Status code is not " + StatusCodeAndId.CODE_200);
+        Assert.assertEquals(apiResponse.statusCode(), HttpStatus.SC_OK, "Status code is not " + HttpStatus.SC_OK);
         log.info("posts all received");
         return apiResponse.getBody().jsonPath().getList(".", ApiPost.class);
     }
@@ -57,7 +60,7 @@ public class ApiSteps {
         log.info("Create ApiPost");
         ApiPost apiPost = apiResponse.getBody().as(ApiPost.class);
         log.info("checking StatusCode");
-        Assert.assertEquals(apiResponse.getStatusCode(), StatusCodeAndId.CODE_201, "Status code is not" + StatusCodeAndId.CODE_201);
+        Assert.assertEquals(apiResponse.getStatusCode(), HttpStatus.SC_CREATED, "Status code is not" + HttpStatus.SC_CREATED);
         return apiPost;
     }
 
@@ -67,7 +70,7 @@ public class ApiSteps {
         log.info("create List<User>");
         List<User> allUsers = apiResponse.getBody().jsonPath().getList(".", User.class);
         log.info("checking StatusCode");
-        Assert.assertEquals(apiResponse.statusCode(), StatusCodeAndId.CODE_200, "Status code is not" + StatusCodeAndId.CODE_200);
+        Assert.assertEquals(apiResponse.statusCode(), HttpStatus.SC_OK, "Status code is not" + HttpStatus.SC_OK);
         return allUsers;
     }
 
