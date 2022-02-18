@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="All Test Suite">
+    <test verbose="2" preserve-order="true" name="D:/k.levchuk">
+        <classes>
+            <class name="test.RestApiTask3Test">
+                <methods>
+                    <include name="restApiTask3Test"/>
+                </methods>
+            </class>
+        </classes>
+    </test>
+</suite>
