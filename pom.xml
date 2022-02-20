@@ -13,10 +13,6 @@
         <maven.compiler.target>8</maven.compiler.target>
         <cucumber.version>6.10.3</cucumber.version>
     </properties>
-    <!--<properties>
-        <maven.compiler.source>14</maven.compiler.source>
-        <maven.compiler.target>14</maven.compiler.target>
-    </properties>-->
     <dependencies>
         <dependency>
             <groupId>org.testng</groupId>
@@ -85,12 +81,12 @@
                     <systemPropertyVariables>
                         <allure.results.directory>${project.build.directory}/allure-results</allure.results.directory>
                     </systemPropertyVariables>
-                </configuration>
+                </configuration>-->
                 <configuration>
                     <suiteXmlFiles>
                         <suiteXmlFile>testng.xml</suiteXmlFile>
                     </suiteXmlFiles>
-                </configuration>-->
+                </configuration>
 
             </plugin>
         <!--    <plugin>
